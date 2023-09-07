@@ -12,7 +12,7 @@ const HomePage = () => {
     const handleRefresh = async () => {
       try {
         await axios.post(
-          "https://auth-server-fmp.vercel.app/auth/refresh-token",
+          "/auth/refresh-token",
           {},
           {
             headers: {

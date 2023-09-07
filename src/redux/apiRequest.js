@@ -5,7 +5,7 @@ import { loginFailed, loginStart, loginSuccess, logoutFailed, logoutStart, logou
 export const loginUser  = async(user, dispatch, navigate) => {
     dispatch(loginStart())
     try {
-        const res = await axios.post("https://auth-server-fmp.vercel.app/auth/login", user)
+        const res = await axios.post("/auth/login", user)
     
         dispatch(loginSuccess(res.data))
         navigate("/")
@@ -17,7 +17,7 @@ export const loginUser  = async(user, dispatch, navigate) => {
 export const registerUser = async(user, dispatch, navigate) => {
     dispatch(registerStart())
     try {
-        await axios.post("https://auth-server-fmp.vercel.app/auth/register", user)
+        await axios.post("/auth/register", user)
         dispatch(registerSuccess())
         navigate("/login")
     } catch (error) {
@@ -28,7 +28,7 @@ export const registerUser = async(user, dispatch, navigate) => {
 export const logOut = async(dispatch, navigate, accessToken, axiosJWT) => {
     dispatch(logoutStart())
     try {
-        await axiosJWT.post("https://auth-server-fmp.vercel.app/auth/logout", {
+        await axiosJWT.post("/auth/logout", {
             headers: {Authorization: `Bearer ${accessToken}`}
         })
         dispatch(logoutSuccess())
