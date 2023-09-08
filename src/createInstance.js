@@ -3,12 +3,11 @@ import jwt_decode from "jwt-decode"
 
 const refreshToken = async(user) => {
     try {
-      const res = await axios.post("/auth/refresh-token",{}, {
+      const res = await axios.post("https://auth-server-fmp.vercel.app/auth/refresh-token",{}, {
         headers: {
-        Authorization: `Bearer ${user?.data.token}`,
-        withCredential: true
-
+          Authorization: `Bearer ${user?.data.token}`,
         },
+        withCredentials: true
       })
       return res.data
     } catch (error) {

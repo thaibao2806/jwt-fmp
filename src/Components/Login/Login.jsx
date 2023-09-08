@@ -3,7 +3,6 @@ import "./login.css";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../../redux/apiRequest";
 import { useDispatch } from "react-redux";
-import axios from "axios";
 const Login = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("");
@@ -11,25 +10,19 @@ const Login = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
      
-    const handleLogin = async(e) => {
+    const handleLogin = (e) => {
         e.preventDefault();
-        // const newUser = {
-        //   email: email,
-        //   password: password,
-        // };
-        // if(!email || !password) {
-        //   setIsValidate("Cần điền đầy đủ thông tin!!")
-        //   return 
-        // }else {
-        //   loginUser(newUser, dispatch, navigate);
-        //   setIsValidate("")
-        // }
-        let res = await axios.post(
-          "https://auth-server-fmp.vercel.app/auth/login", {email, password}, {
-            withCredentials: true
-          }
-        );
-        console.log(res)
+        const newUser = {
+          email: email,
+          password: password,
+        };
+        if(!email || !password) {
+          setIsValidate("Cần điền đầy đủ thông tin!!")
+          return 
+        }else {
+          loginUser(newUser, dispatch, navigate);
+          setIsValidate("")
+        }
     }
     return (
       <section className="login-container">

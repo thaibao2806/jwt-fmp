@@ -12,12 +12,13 @@ const HomePage = () => {
     const handleRefresh = async () => {
       try {
         const res = await axios.post(
-          "/auth/refresh-token",
+          "https://auth-server-fmp.vercel.app/auth/refresh-token",
           {},
           {
             headers: {
               Authorization: `Bearer ${user?.data.token}`,
             },
+            withCredentials: true
           }
         );
         setTest("")
@@ -43,12 +44,13 @@ const HomePage = () => {
 
   const handleRefresh = async() => {
     let res = await axios.post(
-      "/test",
+      "https://auth-server-fmp.vercel.app/test",
       {},
       {
         headers: {
           Authorization: `Bearer ${user?.data.token}`,
         },
+        withCredentials: true
       }
     );
     const msg = res.data.message;
