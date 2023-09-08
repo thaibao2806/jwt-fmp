@@ -6,6 +6,8 @@ const refreshToken = async(user) => {
       const res = await axios.post("/auth/refresh-token",{}, {
         headers: {
         Authorization: `Bearer ${user?.data.token}`,
+        withCredential: true
+
         },
       })
       return res.data

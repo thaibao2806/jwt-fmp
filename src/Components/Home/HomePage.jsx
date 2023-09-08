@@ -43,7 +43,7 @@ const HomePage = () => {
 
   const handleRefresh = async() => {
     let res = await axios.post(
-      " /test",
+      "/test",
       {},
       {
         headers: {
