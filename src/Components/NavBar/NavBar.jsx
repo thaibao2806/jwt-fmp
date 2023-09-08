@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../../redux/apiRequest";
 import { createAxios } from "../../createInstance";
 import { logoutSuccess } from "../../redux/authSlice";
-import axios from "axios";
 
 const NavBar = () => {
   const user = useSelector((state) => state.auth.login.currentUser)

@@ -5,7 +5,9 @@ import { loginFailed, loginStart, loginSuccess, logoutFailed, logoutStart, logou
 export const loginUser  = async(user, dispatch, navigate) => {
     dispatch(loginStart())
     try {
-        const res = await axios.post("https://auth-server-fmp.vercel.app/auth/login", user)
+        const res = await axios.post("https://auth-server-fmp.vercel.app/auth/login", user, {
+            withCredential: true
+        })
     
         dispatch(loginSuccess(res.data))
         navigate("/")
@@ -17,7 +19,7 @@ export const loginUser  = async(user, dispatch, navigate) => {
 export const registerUser = async(user, dispatch, navigate) => {
     dispatch(registerStart())
     try {
-        await axios.post("/auth/register", user)
+        await axios.post("https://auth-server-fmp.vercel.app/auth/register", user)
         dispatch(registerSuccess())
         navigate("/login")
     } catch (error) {
