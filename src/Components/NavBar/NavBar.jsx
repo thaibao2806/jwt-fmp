@@ -4,13 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../../redux/apiRequest";
 import { createAxios } from "../../createInstance";
 import { logoutSuccess } from "../../redux/authSlice";
+import axios from "axios";
 
 const NavBar = () => {
   const user = useSelector((state) => state.auth.login.currentUser)
   const dispatch = useDispatch()
   const navigate = useNavigate()
   let axiosJWT = createAxios(user, dispatch, logoutSuccess)
-  const handleLogout = () => {
+  const handleLogout = async() => {
     logOut(dispatch, navigate, user?.data.token, axiosJWT);
   }
   return (

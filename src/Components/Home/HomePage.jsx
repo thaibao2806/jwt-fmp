@@ -11,7 +11,7 @@ const HomePage = () => {
   useEffect(() => {
     const handleRefresh = async () => {
       try {
-        await axios.post(
+        const res = await axios.post(
           "/auth/refresh-token",
           {},
           {
@@ -21,6 +21,7 @@ const HomePage = () => {
           }
         );
         setTest("")
+        console.log(res);
       } catch (error) {
         console.error(error);
       }
@@ -42,7 +43,7 @@ const HomePage = () => {
 
   const handleRefresh = async() => {
     let res = await axios.post(
-      "https://auth-server-fmp.vercel.app/test",
+      " /test",
       {},
       {
         headers: {
