@@ -8,18 +8,19 @@ export const loginUser  = async(user, dispatch, navigate) => {
         const res = await axios.post("https://auth-server-fmp.vercel.app/auth/login", user, {
             withCredentials: true
         })
-    
         dispatch(loginSuccess(res.data))
         navigate("/")
     } catch (error) {
-        dispatch(loginFailed())
+        dispatch(loginFailed(error.response.data.message));
     }
 }
 
 export const registerUser = async(user, dispatch, navigate) => {
     dispatch(registerStart())
     try {
-        await axios.post("https://auth-server-fmp.vercel.app/auth/register", user)
+        await axios.post("https://auth-server-fmp.vercel.app/auth/register", user, {
+            withCredentials: true
+        })
         dispatch(registerSuccess())
         navigate("/login")
     } catch (error) {

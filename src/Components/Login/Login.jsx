@@ -2,11 +2,12 @@ import {  useState } from "react";
 import "./login.css";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../../redux/apiRequest";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 const Login = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("");
     const [isValidate, setIsValidate] = useState("");
+    const error = useSelector((state)=> state.auth.login?.msg)
     const dispatch = useDispatch()
     const navigate = useNavigate()
      
@@ -16,12 +17,13 @@ const Login = () => {
           email: email,
           password: password,
         };
-        if(!email || !password) {
-          setIsValidate("Cần điền đầy đủ thông tin!!")
-          return 
-        }else {
+        console.log(error)
+        if (!email || !password) {
+          setIsValidate("Cần điền đầy đủ thông tin!!");
+          return;
+        } else {
           loginUser(newUser, dispatch, navigate);
-          setIsValidate("")
+          setIsValidate(error);
         }
     }
     return (
