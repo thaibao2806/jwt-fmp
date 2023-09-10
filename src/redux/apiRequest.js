@@ -1,19 +1,27 @@
 import axios from "axios";
-import { loginFailed, loginStart, loginSuccess, logoutFailed, logoutStart, logoutSuccess, registerFailed, registerStart, registerSuccess } from "./authSlice";
+import { loginFailed, loginResetError, loginStart, loginSuccess, logoutFailed, logoutStart, logoutSuccess, registerFailed, registerStart, registerSuccess } from "./authSlice";
 
 
 export const loginUser  = async(user, dispatch, navigate) => {
     dispatch(loginStart())
     try {
-        const res = await axios.post("https://auth-server-fmp.vercel.app/auth/login", user, {
-            withCredentials: true
-        })
-        dispatch(loginSuccess(res.data))
-        navigate("/")
-    } catch (error) {
-        dispatch(loginFailed(error.response.data.message));
-    }
+    const res = await axios.post("https://auth-server-fmp.vercel.app/auth/login", user, {
+        withCredentials: true
+    });
+    dispatch(loginSuccess(res.data));
+    navigate("/");
+    return null; // Trả về null khi không có lỗi
+} catch (error) {
+    dispatch(loginFailed(error.response.data.message));
+    return error.response.data.message; // Trả về thông báo lỗi khi có lỗi
 }
+}
+
+export const resetLoginError = () => {
+    return (dispatch) => {
+        dispatch(loginResetError());
+    };
+};
 
 export const registerUser = async(user, dispatch, navigate) => {
     dispatch(registerStart())
@@ -31,14 +39,13 @@ export const registerUser = async(user, dispatch, navigate) => {
 export const logOut = async(dispatch, navigate, accessToken, axiosJWT) => {
     dispatch(logoutStart())
     try {
-        const res = await axiosJWT.post("https://auth-server-fmp.vercel.app/auth/logout",{}, {
+        await axiosJWT.post("https://auth-server-fmp.vercel.app/auth/logout",{}, {
             headers: { 
                 Authorization: `Bearer ${accessToken}`,
             },
             withCredential: true
 
         })
-        console.log(res)
         dispatch(logoutSuccess())
         navigate("/login")
     } catch (error) {

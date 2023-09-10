@@ -11,21 +11,21 @@ const Login = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
      
-    const handleLogin = (e) => {
-        e.preventDefault();
-        const newUser = {
-          email: email,
-          password: password,
-        };
-        console.log(error)
-        if (!email || !password) {
-          setIsValidate("Cần điền đầy đủ thông tin!!");
-          return;
-        } else {
-          loginUser(newUser, dispatch, navigate);
-          setIsValidate(error);
-        }
-    }
+    const handleLogin = async (e) => {
+      e.preventDefault();
+      const newUser = {
+        email: email,
+        password: password,
+      };
+      const errorMessage = await loginUser(newUser, dispatch, navigate); // Lưu thông báo lỗi vào biến
+      if (!email || !password) {
+        setIsValidate("Cần điền đầy đủ thông tin!!");
+        return;
+      } else {
+        setIsValidate(errorMessage || error); // Hiển thị thông báo lỗi nếu có
+        await loginUser(newUser, dispatch, navigate);
+      }
+    };
     return (
       <section className="login-container">
         <div className="login-title"> Log in</div>

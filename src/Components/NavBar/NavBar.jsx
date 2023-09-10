@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import "./navbar.css";
 import { useDispatch, useSelector } from "react-redux";
-import { logOut } from "../../redux/apiRequest";
+import { logOut, resetLoginError } from "../../redux/apiRequest";
 import { createAxios } from "../../createInstance";
 import { logoutSuccess } from "../../redux/authSlice";
 
@@ -10,7 +10,8 @@ const NavBar = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   let axiosJWT = createAxios(user, dispatch, logoutSuccess)
-  const handleLogout = async() => {
+  const handleLogout = () => {
+    dispatch(resetLoginError());
     logOut(dispatch, navigate, user?.data.token, axiosJWT);
   }
   return (
