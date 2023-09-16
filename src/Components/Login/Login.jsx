@@ -7,23 +7,36 @@ const Login = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("");
     const [isValidate, setIsValidate] = useState("");
+    const [isFetching, setIsFetching] = useState(false)
     const error = useSelector((state)=> state.auth.login?.msg)
     const dispatch = useDispatch()
     const navigate = useNavigate()
-     
+
     const handleLogin = async (e) => {
       e.preventDefault();
+      if(isFetching) {
+        return
+      }
+
+      setIsFetching(true)
       const newUser = {
         email: email,
         password: password,
-      };
-      const errorMessage = await loginUser(newUser, dispatch, navigate); // Lưu thông báo lỗi vào biến
+      }; // Lưu thông báo lỗi vào biến
       if (!email || !password) {
         setIsValidate("Cần điền đầy đủ thông tin!!");
         return;
       } else {
-        setIsValidate(errorMessage || error); // Hiển thị thông báo lỗi nếu có
-        await loginUser(newUser, dispatch, navigate);
+        const errorMessage = await loginUser(newUser, dispatch, navigate);
+
+        // Xử lý lỗi từ API login
+        setIsValidate(errorMessage || error);
+
+        if (!errorMessage) {
+          // Đăng nhập thành công, thực hiện chuyển hướng đến trang mới
+          navigate("/"); // Thay đổi '/new-page' thành đường dẫn mà bạn muốn chuyển hướng đến
+        }
+        setIsFetching(false)
       }
     };
     return (

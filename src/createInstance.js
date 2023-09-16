@@ -1,7 +1,9 @@
 import axios from "axios";
 import jwt_decode from "jwt-decode"
 
-const refreshToken = async(user) => {
+
+
+export const refreshToken = async(user) => {
     try {
       const res = await axios.post("https://auth-server-fmp.vercel.app/auth/refresh-token",{}, {
         headers: {
@@ -16,25 +18,30 @@ const refreshToken = async(user) => {
   }
 
 export const createAxios = (user, dispatch, stateSuccess) => {
-    const newInstance = axios.create()
-    newInstance.interceptors.request.use(
+  const newInstance = axios.create();
+
+  newInstance.interceptors.request.use(
     async (config) => {
       let date = new Date()
       const decodedToken = jwt_decode(user?.data.token)
-      if(decodedToken.exp < date.getTime()/1000){
-        const data = await refreshToken(user)
+      
+      if (decodedToken.exp < date.getTime() / 1000) {
+        const data = await refreshToken(user);
         const refreshUser = {
-          ...user,
-          token: data.token,
-        }
-        dispatch(stateSuccess(refreshUser))
-        config.headers["Authorization"] = "Bearer " + data.token
+          ...user.data,
+          data: {
+            token: data.data.token,
+          },
+        };
+        dispatch(stateSuccess(refreshUser));
+        config.headers["Authorization"] = "Bearer " + data.data.token;
       }
-      return config
+      return config;
     },
     (error) => {
-      return Promise.reject(error)
+      return Promise.reject(error);
     }
-  )
-  return newInstance
+  );
+
+  return newInstance;
 }

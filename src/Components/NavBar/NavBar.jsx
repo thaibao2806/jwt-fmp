@@ -4,15 +4,28 @@ import { useDispatch, useSelector } from "react-redux";
 import { logOut, resetLoginError } from "../../redux/apiRequest";
 import { createAxios } from "../../createInstance";
 import { logoutSuccess } from "../../redux/authSlice";
+import { useState } from "react";
 
 const NavBar = () => {
   const user = useSelector((state) => state.auth.login.currentUser)
   const dispatch = useDispatch()
   const navigate = useNavigate()
   let axiosJWT = createAxios(user, dispatch, logoutSuccess)
+  const[isFetching, setIsFetching] = useState(false);
   const handleLogout = () => {
-    dispatch(resetLoginError());
-    logOut(dispatch, navigate, user?.data.token, axiosJWT);
+    if(isFetching) {
+      return
+    }
+    setIsFetching(true)
+    try{
+      dispatch(resetLoginError());
+      logOut(dispatch, navigate, user?.data.token, axiosJWT);
+    } catch (error){
+      console.log(error)
+    } finally {
+      setIsFetching(false)
+    }
+    
   }
   return (
     <nav className="navbar-container">

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./register.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../../redux/apiRequest";
 const Register = () => {
@@ -11,13 +11,20 @@ const Register = () => {
     const [isValidate, setIsValidate] = useState("");
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const handleRegister = (e) => {
+    const error = useSelector((state) => state.auth.registerUser?.msg);
+    const[isFetching, setIsFetching] = useState(false);
+    const handleRegister = async(e) => {
         e.preventDefault()
         const newUser = {
             email: email,
             fullName: userName,
             password: password
         }
+        if (isFetching) {
+          return;
+        }
+        setIsFetching(true)
+        const errorMessage = await registerUser(newUser, dispatch, navigate);
         if (confirmPassword !== password) {
            setIsValidate("Mật khẩu nhập lại không đúng!!!")
            return;
@@ -26,8 +33,9 @@ const Register = () => {
           setIsValidate("Cần nhập đầy đủ thông tin!!!");
           return;
         } else {
-          registerUser(newUser, dispatch, navigate);
-          setIsValidate("")
+          setIsValidate(errorMessage || error);
+          await registerUser(newUser, dispatch, navigate);
+          setIsFetching(false)
         }
     }
     return (
