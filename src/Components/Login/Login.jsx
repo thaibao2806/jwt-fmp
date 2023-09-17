@@ -28,10 +28,9 @@ const Login = () => {
         return;
       } else {
         const errorMessage = await loginUser(newUser, dispatch, navigate);
-
+        setIsFetching(false);
         // Xử lý lỗi từ API login
         setIsValidate(errorMessage || error);
-
         if (!errorMessage) {
           // Đăng nhập thành công, thực hiện chuyển hướng đến trang mới
           navigate("/"); // Thay đổi '/new-page' thành đường dẫn mà bạn muốn chuyển hướng đến
@@ -59,10 +58,16 @@ const Login = () => {
             placeholder="Enter your password"
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button type="submit" className="btn btn-primary mt-3">
-            {" "}
-            Log in{" "}
-          </button>
+          {isFetching ? (
+            <button type="submit" className="btn btn-primary mt-3" disabled>
+              Log in...
+            </button>
+          ) : (
+            <button type="submit" className="btn btn-primary mt-3">
+              {" "}
+              Log in{" "}
+            </button>
+          )}
         </form>
         <div className="login-register"> Don't have an account yet? </div>
         <Link className="login-register-link" to="/register">

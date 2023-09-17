@@ -24,7 +24,7 @@ const Register = () => {
           return;
         }
         setIsFetching(true)
-        const errorMessage = await registerUser(newUser, dispatch, navigate);
+        // const errorMessage = await registerUser(newUser, dispatch, navigate);
         if (confirmPassword !== password) {
            setIsValidate("Mật khẩu nhập lại không đúng!!!")
            return;
@@ -33,9 +33,13 @@ const Register = () => {
           setIsValidate("Cần nhập đầy đủ thông tin!!!");
           return;
         } else {
+          const errorMessage = await registerUser(newUser, dispatch, navigate);
+           setIsFetching(false);
           setIsValidate(errorMessage || error);
-          await registerUser(newUser, dispatch, navigate);
-          setIsFetching(false)
+           if (!errorMessage) {
+             // Đăng nhập thành công, thực hiện chuyển hướng đến trang mới
+             navigate("/login"); // Thay đổi '/new-page' thành đường dẫn mà bạn muốn chuyển hướng đến
+           }
         }
     }
     return (
@@ -73,10 +77,15 @@ const Register = () => {
             placeholder="Confirm password"
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
-          <button type="submit" className="btn btn-primary mt-3">
-            {" "}
-            Create account{" "}
-          </button>
+          {isFetching ? (
+            <button type="submit" className="btn btn-primary mt-3" disabled>
+              Creating account...
+            </button>
+          ) : (
+            <button type="submit" className="btn btn-primary mt-3">
+              Create account
+            </button>
+          )}
         </form>
       </section>
     );
