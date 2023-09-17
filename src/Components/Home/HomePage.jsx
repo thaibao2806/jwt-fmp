@@ -117,9 +117,8 @@ const HomePage = () => {
           const refreshStatus = refreshError.response.status;
 
           if (refreshStatus === 401) {
-            // Mã trạng thái 401 khi cố gắng refresh token nghĩa là refresh token hết hạn
-            // Bạn có thể thực hiện đăng xuất người dùng ở đây
-            console.log("Refresh token hết hạn. Đăng xuất người dùng.");
+            // Mã trạng thái 401 khi cố gắng refresh token nghĩa là refre
+            logOut(dispatch, navigate, user?.data.token, axiosJWT);
             return; // Kết thúc xử lý nếu refresh token hết hạn
           }
         }
